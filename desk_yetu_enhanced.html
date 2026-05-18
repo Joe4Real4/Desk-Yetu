@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desk Yetu — WhatsApp Order Management Built for Kenya</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #25D366;
+            --primary-dark: #128C7E;
+            --accent: #00A884;
+            --dark: #0a0a0a;
+            --dark-2: #111111;
+            --dark-3: #1a1a1a;
+            --dark-4: #222222;
+            --gradient-1: #25D366;
+            --gradient-2: #00d4ff;
+            --gradient-3: #667eea;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--dark);
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--dark-2); }
+        ::-webkit-scrollbar-thumb { background: var(--primary-dark); border-radius: 4px; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+        @keyframes float-reverse {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(20px) rotate(-2deg); }
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(37,211,102,0.3); }
+            50% { box-shadow: 0 0 40px rgba(37,211,102,0.6), 0 0 80px rgba(37,211,102,0.2); }
+        }
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes scale-in {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slide-up {
+            from { transform: translateY(60px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes slide-in-right {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slide-in-left {
+            from { transform: translateX(-100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes bounce-soft {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        @keyframes particle-rise {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+        @keyframes typing-dot {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        @keyframes count-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+        .gradient-text {
+            background: linear-gradient(135deg, var(--gradient-1) 0%, var(--gradient-2) 50%, var(--gradient-3) 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+        }
+        .glass {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* PARTICLES */
+        .particles {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute; width: 4px; height: 4px;
+            background: var(--primary); border-radius: 50%;
+            opacity: 0; animation: particle-rise linear infinite;
+        }
+
+        /* NAV */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0;
+            z-index: 1000; padding: 16px 0;
+            transition: all 0.3s ease;
+        }
+        .nav.scrolled {
+            background: rgba(10,10,10,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+        .logo {
+            display: flex; align-items: center; gap: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 24px;
+            color: #fff; text-decoration: none;
+        }
+        .logo-icon {
+            width: 40px; height: 40px;
+            background: var(--primary); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; transform: rotate(-5deg);
+            transition: transform 0.3s ease;
+        }
+        .logo:hover .logo-icon { transform: rotate(5deg) scale(1.1); }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-link {
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            font-size: 14px; font-weight: 500;
+            transition: color 0.2s; position: relative;
+        }
+        .nav-link:hover { color: #fff; }
+        .nav-link::after {
+            content: ''; position: absolute;
+            bottom: -4px; left: 0; width: 0; height: 2px;
+            background: var(--primary); transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-cta {
+            background: var(--primary); color: #000;
+            padding: 10px 24px; border-radius: 100px;
+            font-weight: 700; font-size: 14px;
+            text-decoration: none; transition: all 0.3s ease;
+            border: none; cursor: pointer;
+        }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(37,211,102,0.3); }
+
+        /* HERO */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center;
+            position: relative; overflow: hidden; padding-top: 80px;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            z-index: -2;
+        }
+        .hero-grid {
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(37,211,102,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(37,211,102,0.03) 1px, transparent 1px);
+            background-size: 60px 60px; z-index: -1;
+            mask-image: radial-gradient(ellipse at center, black 40%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 70%);
+        }
+        .hero-orb {
+            position: absolute; border-radius: 50%;
+            filter: blur(80px); opacity: 0.4; z-index: -1;
+        }
+        .hero-orb-1 {
+            width: 500px; height: 500px;
+            background: var(--primary);
+            top: -10%; right: -5%;
+            animation: float 8s ease-in-out infinite;
+        }
+        .hero-orb-2 {
+            width: 400px; height: 400px;
+            background: #667eea;
+            bottom: -10%; left: -10%;
+            animation: float-reverse 10s ease-in-out infinite;
+        }
+        .hero-orb-3 {
+            width: 300px; height: 300px;
+            background: #00d4ff;
+            top: 40%; left: 30%;
+            animation: float 12s ease-in-out infinite;
+        }
+        .hero-inner {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 64px; align-items: center;
+            position: relative; z-index: 1;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(37,211,102,0.1);
+            border: 1px solid rgba(37,211,102,0.3);
+            padding: 8px 20px; border-radius: 100px;
+            font-size: 13px; font-weight: 600;
+            color: var(--primary); margin-bottom: 32px;
+            animation: slide-up 0.6s ease-out;
+        }
+        .hero-badge-dot {
+            width: 8px; height: 8px;
+            background: var(--primary); border-radius: 50%;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(40px, 5vw, 72px);
+            font-weight: 700; line-height: 1.1;
+            margin-bottom: 24px;
+            animation: slide-up 0.6s ease-out 0.1s both;
+        }
+        .hero h1 .highlight {
+            display: inline-block; position: relative;
+        }
+        .hero h1 .highlight::after {
+            content: ''; position: absolute;
+            bottom: 4px; left: 0; right: 0; height: 12px;
+            background: rgba(37,211,102,0.3); border-radius: 4px;
+            z-index: -1; transform: skewX(-8deg);
+        }
+        .hero-sub {
+            font-size: 18px; color: rgba(255,255,255,0.6);
+            max-width: 520px; margin-bottom: 40px;
+            line-height: 1.7;
+            animation: slide-up 0.6s ease-out 0.2s both;
+        }
+        .hero-cta-group {
+            display: flex; gap: 16px; flex-wrap: wrap;
+            animation: slide-up 0.6s ease-out 0.3s both;
+        }
+        .btn-primary {
+            background: var(--primary); color: #000;
+            padding: 16px 32px; border-radius: 100px;
+            font-weight: 700; font-size: 16px;
+            text-decoration: none; display: inline-flex;
+            align-items: center; gap: 8px;
+            transition: all 0.3s ease; border: none;
+            cursor: pointer; position: relative; overflow: hidden;
+        }
+        .btn-primary::before {
+            content: ''; position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        .btn-primary:hover::before { left: 100%; }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 80px rgba(37,211,102,0.4);
+        }
+        .btn-secondary {
+            background: transparent; color: #fff;
+            padding: 16px 32px; border-radius: 100px;
+            font-weight: 600; font-size: 16px;
+            text-decoration: none; display: inline-flex;
+            align-items: center; gap: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+        }
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-3px);
+        }
+        .btn-float { animation: bounce-soft 2s ease-in-out infinite; }
+        .hero-stats {
+            display: flex; gap: 40px; margin-top: 48px;
+            animation: slide-up 0.6s ease-out 0.4s both;
+        }
+        .hero-stat { text-align: center; }
+        .hero-stat-number {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 32px; font-weight: 700;
+            color: var(--primary); display: block;
+        }
+        .hero-stat-label {
+            font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px;
+        }
+
+        /* HERO 3D PHONE */
+        .hero-visual {
+            position: relative; perspective: 1000px;
+            animation: slide-in-right 0.8s ease-out 0.3s both;
+        }
+        .phone-3d {
+            width: 320px; margin: 0 auto;
+            transform-style: preserve-3d;
+            transform: rotateY(-15deg) rotateX(5deg);
+            transition: transform 0.5s ease;
+        }
+        .phone-3d:hover {
+            transform: rotateY(-5deg) rotateX(0deg) scale(1.02);
+        }
+        .phone-frame {
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border-radius: 40px; padding: 12px;
+            box-shadow:
+                0 25px 50px rgba(0,0,0,0.5),
+                0 0 0 1px rgba(255,255,255,0.1),
+                inset 0 1px 0 rgba(255,255,255,0.1);
+            position: relative;
+        }
+        .phone-notch {
+            position: absolute; top: 12px; left: 50%;
+            transform: translateX(-50%);
+            width: 120px; height: 28px;
+            background: #1a1a1a;
+            border-radius: 0 0 20px 20px; z-index: 10;
+        }
+        .phone-screen {
+            background: #0a0a0a; border-radius: 32px;
+            overflow: hidden; min-height: 580px;
+            position: relative;
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #075E54, #128C7E);
+            padding: 16px; padding-top: 40px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .chat-avatar {
+            width: 40px; height: 40px;
+            background: var(--primary); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 14px; color: #000;
+        }
+        .chat-header-info { flex: 1; }
+        .chat-header-name { font-weight: 600; font-size: 15px; }
+        .chat-header-status { font-size: 12px; opacity: 0.7; }
+        .chat-body {
+            padding: 16px; display: flex;
+            flex-direction: column; gap: 12px;
+        }
+        .chat-bubble {
+            max-width: 80%; padding: 10px 14px;
+            border-radius: 12px; font-size: 13px;
+            line-height: 1.5; animation: scale-in 0.3s ease-out;
+        }
+        .chat-in {
+            background: #2a2a2a; align-self: flex-start;
+            border-bottom-left-radius: 4px; color: #fff;
+        }
+        .chat-out {
+            background: linear-gradient(135deg, #075E54, #128C7E);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px; color: #fff;
+        }
+        .chat-time {
+            font-size: 10px; opacity: 0.6;
+            margin-top: 4px; text-align: right;
+        }
+        .chat-typing {
+            display: flex; gap: 4px;
+            padding: 12px 16px;
+            background: #2a2a2a; border-radius: 20px;
+            align-self: flex-start; width: fit-content;
+        }
+        .typing-dot {
+            width: 8px; height: 8px;
+            background: var(--primary); border-radius: 50%;
+        }
+        .typing-dot:nth-child(1) { animation: typing-dot 1.4s ease-in-out infinite; }
+        .typing-dot:nth-child(2) { animation: typing-dot 1.4s ease-in-out 0.2s infinite; }
+        .typing-dot:nth-child(3) { animation: typing-dot 1.4s ease-in-out 0.4s infinite; }
+
+        /* FLOATING CARDS */
+        .floating-card {
+            position: absolute;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 16px; padding: 16px 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+        .floating-card-1 { top: -30px; right: -60px; animation-delay: 0s; }
+        .floating-card-2 { bottom: 40px; left: -80px; animation-delay: 2s; animation-duration: 7s; }
+        .floating-card-3 { top: 50%; right: -100px; animation-delay: 1s; animation-duration: 8s; }
+        .floating-icon {
+            width: 40px; height: 40px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; margin-bottom: 8px;
+        }
+        .floating-title { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+        .floating-desc { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+        /* TRUST BAR */
+        .trust {
+            padding: 40px 0;
+            background: rgba(255,255,255,0.02);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+        .trust-inner {
+            display: flex; justify-content: center;
+            gap: 48px; flex-wrap: wrap;
+        }
+        .trust-item {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 14px; color: rgba(255,255,255,0.6);
+        }
+        .trust-icon {
+            width: 40px; height: 40px;
+            background: rgba(37,211,102,0.1);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; transition: all 0.3s ease;
+        }
+        .trust-item:hover .trust-icon {
+            background: rgba(37,211,102,0.2);
+            transform: scale(1.1) rotate(5deg);
+        }
+        .trust-text strong { color: #fff; display: block; font-weight: 600; }
+
+        /* SECTION HEADERS */
+        .section-header { text-align: center; margin-bottom: 64px; }
+        .section-label {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(37,211,102,0.1);
+            border: 1px solid rgba(37,211,102,0.2);
+            padding: 6px 16px; border-radius: 100px;
+            font-size: 12px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            color: var(--primary); margin-bottom: 20px;
+        }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700; line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .section-desc {
+            font-size: 18px; color: rgba(255,255,255,0.5);
+            max-width: 600px; margin: 0 auto;
+        }
+
+        /* PROBLEM */
+        .problem { padding: 120px 0; position: relative; }
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .problem-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px; padding: 32px;
+            position: relative; overflow: hidden;
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .problem-card::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, #ff4757, #ffa502);
+            opacity: 0.8;
+        }
+        .problem-card:hover {
+            transform: translateY(-8px) rotateX(2deg);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .problem-card:hover::before { opacity: 1; height: 4px; }
+        .problem-icon {
+            width: 56px; height: 56px;
+            background: rgba(255,71,87,0.1);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        .problem-card:hover .problem-icon { transform: scale(1.1) rotate(-5deg); }
+        .problem-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+        .problem-card p { color: rgba(255,255,255,0.6); font-size: 15px; line-height: 1.7; }
+        .problem-stat {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(255,71,87,0.15);
+            color: #ff4757; padding: 6px 14px;
+            border-radius: 100px; font-size: 13px;
+            font-weight: 700; margin-top: 16px;
+        }
+
+        /* SOLUTION */
+        .solution {
+            padding: 120px 0;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark-2) 100%);
+            position: relative; overflow: hidden;
+        }
+        .solution::before {
+            content: ''; position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(37,211,102,0.03) 0%, transparent 50%);
+            animation: rotate-slow 60s linear infinite;
+        }
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px; position: relative; z-index: 1;
+        }
+        .solution-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 40px 32px;
+            position: relative; overflow: hidden;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+        }
+        .solution-card::after {
+            content: ''; position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, var(--primary) 0%, transparent 70%);
+            opacity: 0; transition: opacity 0.5s ease;
+        }
+        .solution-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: rgba(37,211,102,0.3);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4), 0 0 40px rgba(37,211,102,0.3);
+        }
+        .solution-card:hover::after { opacity: 0.05; }
+        .solution-icon {
+            width: 64px; height: 64px; border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; margin-bottom: 24px;
+            position: relative; z-index: 1;
+            transition: transform 0.4s ease;
+        }
+        .solution-card:hover .solution-icon { transform: scale(1.15) rotate(10deg); }
+        .icon-green { background: rgba(37,211,102,0.15); }
+        .icon-blue { background: rgba(0,212,255,0.15); }
+        .icon-purple { background: rgba(102,126,234,0.15); }
+        .icon-orange { background: rgba(255,165,2,0.15); }
+        .solution-card h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; position: relative; z-index: 1; }
+        .solution-card p { color: rgba(255,255,255,0.6); font-size: 15px; line-height: 1.7; position: relative; z-index: 1; }
+
+        /* HOW IT WORKS */
+        .how-it-works { padding: 120px 0; position: relative; }
+        .steps-container {
+            display: flex; gap: 0; position: relative;
+            overflow-x: auto; padding-bottom: 20px;
+            scrollbar-width: none;
+        }
+        .steps-container::-webkit-scrollbar { display: none; }
+        .step {
+            flex: 1; min-width: 220px;
+            text-align: center; position: relative;
+            padding: 0 20px;
+        }
+        .step-connector {
+            position: absolute; top: 32px; left: 60%;
+            width: 80%; height: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+        }
+        .step:last-child .step-connector { display: none; }
+        .step-num {
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 800; font-size: 24px;
+            margin: 0 auto 24px; position: relative; z-index: 1;
+            box-shadow: 0 8px 32px rgba(37,211,102,0.3);
+            transition: all 0.3s ease;
+        }
+        .step:hover .step-num {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 40px rgba(37,211,102,0.5);
+        }
+        .step h4 { font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+        .step p { font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; }
+
+        /* WHATSAPP DEMO */
+        .whatsapp-demo {
+            padding: 120px 0;
+            background: linear-gradient(180deg, var(--dark-2) 0%, #0d1b1a 100%);
+            position: relative; overflow: hidden;
+        }
+        .whatsapp-demo::before {
+            content: ''; position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(circle at 20% 50%, rgba(37,211,102,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(0,212,255,0.05) 0%, transparent 50%);
+        }
+        .whatsapp-content {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 80px; align-items: center;
+            position: relative; z-index: 1;
+        }
+        .whatsapp-text h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700; margin-bottom: 24px; line-height: 1.2;
+        }
+        .whatsapp-text > p {
+            font-size: 18px; color: rgba(255,255,255,0.6);
+            margin-bottom: 40px; line-height: 1.7;
+        }
+        .whatsapp-features {
+            list-style: none;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .whatsapp-features li {
+            display: flex; align-items: center; gap: 16px;
+            font-size: 16px; padding: 16px 20px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+        }
+        .whatsapp-features li:hover {
+            background: rgba(37,211,102,0.05);
+            border-color: rgba(37,211,102,0.2);
+            transform: translateX(8px);
+        }
+        .feature-check {
+            width: 32px; height: 32px;
+            background: rgba(37,211,102,0.2);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-features li:hover .feature-check {
+            background: var(--primary); transform: scale(1.1);
+        }
+        .phone-showcase {
+            perspective: 1200px;
+            display: flex; justify-content: center;
+        }
+        .phone-3d-large {
+            width: 340px;
+            transform-style: preserve-3d;
+            transform: rotateY(-20deg) rotateX(10deg);
+            transition: transform 0.6s ease;
+            animation: float 8s ease-in-out infinite;
+        }
+        .phone-3d-large:hover {
+            transform: rotateY(-5deg) rotateX(0deg) scale(1.05);
+            animation-play-state: paused;
+        }
+
+        /* PRICING */
+        .pricing { padding: 120px 0; position: relative; }
+        .pricing-toggle {
+            display: flex; justify-content: center; gap: 16px;
+            margin-bottom: 48px;
+        }
+        .pricing-toggle-btn {
+            padding: 12px 24px; border-radius: 100px;
+            font-weight: 600; font-size: 14px;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+            background: transparent; color: rgba(255,255,255,0.6);
+            transition: all 0.3s ease;
+        }
+        .pricing-toggle-btn.active {
+            background: var(--primary); color: #000;
+            border-color: var(--primary);
+        }
+        .pricing-toggle-btn:hover:not(.active) {
+            border-color: rgba(255,255,255,0.4);
+            color: #fff;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px; max-width: 1000px; margin: 0 auto;
+        }
+        .pricing-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 48px 32px;
+            text-align: center; position: relative;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+        }
+        .pricing-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+        .pricing-card.popular {
+            border: 2px solid var(--primary);
+            transform: scale(1.05); z-index: 2;
+            box-shadow: 0 0 60px rgba(37,211,102,0.15);
+        }
+        .pricing-card.popular:hover {
+            transform: scale(1.08) translateY(-12px);
+            box-shadow: 0 0 80px rgba(37,211,102,0.3), 0 30px 60px rgba(0,0,0,0.4);
+        }
+        .popular-badge {
+            position: absolute; top: -16px; left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: #000; padding: 8px 24px;
+            border-radius: 100px; font-size: 13px;
+            font-weight: 800; text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+        }
+        .pricing-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 22px; font-weight: 700; margin-bottom: 8px;
+        }
+        .pricing-desc { font-size: 14px; color: rgba(255,255,255,0.5); margin-bottom: 24px; }
+        .pricing-amount {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 48px; font-weight: 800;
+            line-height: 1; margin-bottom: 8px;
+        }
+        .pricing-amount span { font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.5); }
+        .pricing-save {
+            font-size: 13px; color: var(--primary);
+            font-weight: 600; margin-bottom: 16px;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .pricing-save.visible { opacity: 1; }
+        .pricing-card ul {
+            list-style: none; text-align: left;
+            margin: 32px 0;
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .pricing-card ul li {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 14px; color: rgba(255,255,255,0.7);
+            padding: 4px 0;
+        }
+        .pricing-card ul li::before {
+            content: '✓'; color: var(--primary); font-weight: 800;
+            width: 24px; height: 24px;
+            background: rgba(37,211,102,0.1);
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; flex-shrink: 0;
+        }
+        .pricing-cta {
+            display: block; width: 100%;
+            padding: 16px; border-radius: 12px;
+            font-weight: 700; font-size: 15px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none; cursor: pointer;
+        }
+        .pricing-cta-primary {
+            background: var(--primary); color: #000;
+        }
+        .pricing-cta-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(37,211,102,0.3);
+        }
+        .pricing-cta-secondary {
+            background: transparent; color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .pricing-cta-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        /* TESTIMONIALS */
+        .testimonials {
+            padding: 120px 0;
+            background: linear-gradient(180deg, var(--dark) 0%, var(--dark-2) 100%);
+            position: relative;
+        }
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 24px;
+        }
+        .testimonial-card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 40px;
+            position: relative;
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+        }
+        .testimonial-card:hover {
+            transform: translateY(-8px) rotateX(2deg);
+            border-color: rgba(37,211,102,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .testimonial-quote {
+            position: absolute; top: 24px; right: 24px;
+            font-size: 80px; color: var(--primary);
+            opacity: 0.15; font-family: Georgia, serif;
+            line-height: 1;
+        }
+        .testimonial-text {
+            font-size: 16px; color: rgba(255,255,255,0.8);
+            line-height: 1.8; margin-bottom: 32px;
+            position: relative; z-index: 1;
+        }
+        .testimonial-author {
+            display: flex; align-items: center; gap: 16px;
+        }
+        .testimonial-avatar {
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 18px; color: #000;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+        .testimonial-card:hover .testimonial-avatar {
+            transform: scale(1.1) rotate(5deg);
+        }
+        .testimonial-name { font-weight: 700; font-size: 16px; }
+        .testimonial-role { font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+        /* ROI CALCULATOR */
+        .roi-section {
+            padding: 120px 0;
+            background: linear-gradient(180deg, var(--dark-2) 0%, var(--dark-3) 100%);
+            position: relative; overflow: hidden;
+        }
+        .roi-section::before {
+            content: ''; position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(37,211,102,0.03) 0%, transparent 50%);
+            animation: rotate-slow 60s linear infinite;
+        }
+        .roi-container {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 64px; align-items: center;
+            position: relative; z-index: 1;
+        }
+        .roi-calculator {
+            background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px; padding: 40px;
+        }
+        .roi-calculator h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px; font-weight: 700; margin-bottom: 24px;
+        }
+        .roi-input-group {
+            margin-bottom: 20px;
+        }
+        .roi-input-group label {
+            display: block; font-size: 14px; font-weight: 600;
+            margin-bottom: 8px; color: rgba(255,255,255,0.8);
+        }
+        .roi-input {
+            width: 100%; padding: 14px 16px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; color: #fff;
+            font-size: 16px; font-family: inherit;
+            transition: all 0.3s ease;
+        }
+        .roi-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(37,211,102,0.1);
+        }
+        .roi-result {
+            margin-top: 24px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(37,211,102,0.1), rgba(0,212,255,0.05));
+            border: 1px solid rgba(37,211,102,0.2);
+            border-radius: 16px;
+            text-align: center;
+        }
+        .roi-result-label {
+            font-size: 14px; color: rgba(255,255,255,0.6);
+            margin-bottom: 8px;
+        }
+        .roi-result-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 36px; font-weight: 800;
+            color: var(--primary);
+        }
+        .roi-result-sublabel {
+            font-size: 13px; color: rgba(255,255,255,0.5);
+            margin-top: 4px;
+        }
+        .roi-text h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(32px, 4vw, 48px);
+            font-weight: 700; margin-bottom: 20px; line-height: 1.2;
+        }
+        .roi-text > p {
+            font-size: 18px; color: rgba(255,255,255,0.6);
+            margin-bottom: 32px; line-height: 1.7;
+        }
+        .roi-benefits {
+            list-style: none;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .roi-benefits li {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 15px; color: rgba(255,255,255,0.8);
+        }
+        .roi-benefits li span {
+            width: 32px; height: 32px;
+            background: rgba(37,211,102,0.15);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; flex-shrink: 0;
+        }
+
+        /* FEATURE COMPARISON */
+        .comparison {
+            padding: 120px 0;
+            background: var(--dark);
+            position: relative;
+        }
+        .comparison-table-wrapper {
+            overflow-x: auto;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .comparison-table {
+            width: 100%; border-collapse: collapse;
+            min-width: 700px;
+        }
+        .comparison-table th {
+            background: rgba(255,255,255,0.05);
+            padding: 20px 24px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .comparison-table th:first-child { border-radius: 20px 0 0 0; }
+        .comparison-table th:last-child { border-radius: 0 20px 0 0; text-align: center; }
+        .comparison-table td {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+        }
+        .comparison-table tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+        .comparison-table td:last-child {
+            text-align: center;
+            color: var(--primary);
+            font-weight: 700;
+        }
+        .comparison-table .feature-category {
+            background: rgba(37,211,102,0.05);
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .comparison-table .feature-category td {
+            border-bottom: 1px solid rgba(37,211,102,0.1);
+        }
+        .check-yes { color: var(--primary); font-weight: 800; }
+        .check-no { color: #ff4757; opacity: 0.6; }
+        .check-partial { color: #ffa502; }
+
+        /* FAQ */
+        .faq {
+            padding: 120px 0;
+            background: linear-gradient(180deg, var(--dark-2) 0%, var(--dark) 100%);
+            position: relative;
+        }
+        .faq-grid {
+            max-width: 800px; margin: 0 auto;
+            display: flex; flex-direction: column; gap: 16px;
+        }
+        .faq-item {
+            background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover {
+            border-color: rgba(255,255,255,0.12);
+        }
+        .faq-item.active {
+            border-color: rgba(37,211,102,0.3);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .faq-question {
+            padding: 24px 32px;
+            display: flex; justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .faq-question:hover {
+            color: var(--primary);
+        }
+        .faq-icon {
+            width: 28px; height: 28px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .faq-item.active .faq-icon {
+            background: var(--primary);
+            color: #000;
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 32px;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 32px 24px;
+        }
+        .faq-answer p {
+            color: rgba(255,255,255,0.6);
+            font-size: 15px; line-height: 1.7;
+        }
+
+        /* INTEGRATIONS */
+        .integrations {
+            padding: 100px 0;
+            background: var(--dark-2);
+            position: relative;
+        }
+        .integrations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            max-width: 900px; margin: 0 auto;
+        }
+        .integration-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.4s ease;
+        }
+        .integration-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(37,211,102,0.3);
+            background: rgba(37,211,102,0.05);
+        }
+        .integration-icon {
+            width: 56px; height: 56px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 16px;
+            transition: all 0.3s ease;
+        }
+        .integration-card:hover .integration-icon {
+            transform: scale(1.1);
+            background: rgba(37,211,102,0.15);
+        }
+        .integration-card h4 {
+            font-size: 16px; font-weight: 700; margin-bottom: 4px;
+        }
+        .integration-card p {
+            font-size: 13px; color: rgba(255,255,255,0.5);
+        }
+
+        /* SHOWCASE */
+        .showcase { padding: 80px 0; position: relative; overflow: hidden; }
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px; position: relative;
+        }
+        .showcase-item {
+            border-radius: 20px; overflow: hidden;
+            position: relative; aspect-ratio: 4/3;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+        .showcase-item:nth-child(1) { transform: translateY(0); }
+        .showcase-item:nth-child(2) { transform: translateY(40px); }
+        .showcase-item:nth-child(3) { transform: translateY(-20px); }
+        .showcase-item:hover {
+            transform: translateY(-10px) scale(1.03);
+            z-index: 10;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+        .showcase-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .showcase-item:hover img { transform: scale(1.1); }
+        .showcase-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.8) 100%);
+            display: flex; align-items: flex-end; padding: 24px;
+        }
+        .showcase-label { font-weight: 700; font-size: 18px; }
+        .showcase-sublabel { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 4px; }
+
+        /* CTA */
+        .cta-section {
+            padding: 120px 0;
+            position: relative; overflow: hidden;
+            text-align: center;
+        }
+        .cta-section::before {
+            content: ''; position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background:
+                radial-gradient(circle at 30% 50%, rgba(37,211,102,0.08) 0%, transparent 40%),
+                radial-gradient(circle at 70% 50%, rgba(102,126,234,0.08) 0%, transparent 40%);
+            animation: rotate-slow 30s linear infinite;
+        }
+        .cta-content {
+            position: relative; z-index: 1;
+            max-width: 700px; margin: 0 auto;
+        }
+        .cta-section h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 700; margin-bottom: 20px; line-height: 1.2;
+        }
+        .cta-section > .container > p {
+            font-size: 18px; color: rgba(255,255,255,0.6);
+            margin-bottom: 40px;
+        }
+        .cta-buttons {
+            display: flex; gap: 16px;
+            justify-content: center; flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        .cta-note { font-size: 14px; color: rgba(255,255,255,0.4); }
+
+        /* FOOTER */
+        footer {
+            padding: 60px 0 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+        }
+        .footer-logo {
+            display: inline-flex; align-items: center; gap: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 24px; margin-bottom: 16px;
+        }
+        .footer-tagline {
+            color: rgba(255,255,255,0.5);
+            font-size: 14px; margin-bottom: 32px;
+        }
+        .footer-links {
+            display: flex; justify-content: center;
+            gap: 32px; margin-bottom: 32px; flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none; font-size: 14px;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-copy { color: rgba(255,255,255,0.3); font-size: 13px; }
+
+        /* FAB */
+        .fab {
+            position: fixed; bottom: 32px; right: 32px;
+            z-index: 999; width: 64px; height: 64px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; cursor: pointer; border: none;
+            box-shadow: 0 8px 32px rgba(37,211,102,0.4);
+            transition: all 0.3s ease;
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        .fab:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 12px 40px rgba(37,211,102,0.6);
+        }
+        .fab-tooltip {
+            position: absolute; right: 80px; top: 50%;
+            transform: translateY(-50%);
+            background: var(--dark-3); padding: 8px 16px;
+            border-radius: 8px; font-size: 13px; font-weight: 600;
+            white-space: nowrap; opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .fab:hover .fab-tooltip { opacity: 1; }
+
+        /* SCROLL REVEAL */
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: all 0.8s ease;
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* RESPONSIVE */
+        @media (max-width: 1024px) {
+            .hero-inner { grid-template-columns: 1fr; text-align: center; }
+            .hero-sub { margin: 0 auto 40px; }
+            .hero-cta-group { justify-content: center; }
+            .hero-stats { justify-content: center; }
+            .hero-visual { display: none; }
+            .whatsapp-content { grid-template-columns: 1fr; }
+            .showcase-grid { grid-template-columns: 1fr; }
+            .showcase-item:nth-child(1), .showcase-item:nth-child(2), .showcase-item:nth-child(3) { transform: translateY(0); }
+            .roi-container { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 36px; }
+            .pricing-card.popular { transform: scale(1); }
+            .pricing-card.popular:hover { transform: scale(1.02); }
+            .steps-container { flex-direction: column; }
+            .step-connector { display: none; }
+            .fab { bottom: 20px; right: 20px; width: 56px; height: 56px; font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <button class="fab" onclick="alert('WhatsApp us: 0712 345 678')">
+        💬
+        <span class="fab-tooltip">Chat on WhatsApp</span>
+    </button>
+
+    <nav class="nav" id="nav">
+        <div class="container nav-inner">
+            <a href="#" class="logo">
+                <div class="logo-icon">📦</div>
+                Desk Yetu
+            </a>
+            <div class="nav-links">
+                <a href="#problem" class="nav-link">The Problem</a>
+                <a href="#solution" class="nav-link">Solution</a>
+                <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#testimonials" class="nav-link">Stories</a>
+                <a href="#cta" class="nav-cta">Start Free Pilot →</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-grid"></div>
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="container hero-inner">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    🇰🇪 Made in Kenya · M-Pesa Ready · No Training Needed
+                </div>
+                <h1>
+                    Turn WhatsApp Messages Into <span class="highlight gradient-text">Structured Orders</span> in Seconds
+                </h1>
+                <p class="hero-sub">
+                    Desk Yetu helps tile distributors, hardware wholesalers, and building materials suppliers stop losing orders in WhatsApp chats. One inbox. One system. Zero chaos. <em style="color: var(--primary);">Karibu sana.</em>
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#pricing" class="btn-primary btn-float">
+                        Start Free 14-Day Pilot →
+                    </a>
+                    <a href="#how-it-works" class="btn-secondary">
+                        <span>▶</span> See How It Works
+                    </a>
+                </div>
+                <div class="hero-stats">
+                    <div class="hero-stat">
+                        <span class="hero-stat-number" data-target="50">0</span>
+                        <span class="hero-stat-label">Distributors Using It</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number" data-target="12000">0</span>
+                        <span class="hero-stat-label">Orders Processed</span>
+                    </div>
+                    <div class="hero-stat">
+                        <span class="hero-stat-number" data-target="2">0</span>
+                        <span class="hero-stat-label">Hours Saved Per Day</span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="phone-3d">
+                    <div class="phone-frame">
+                        <div class="phone-notch"></div>
+                        <div class="phone-screen">
+                            <div class="chat-header">
+                                <div class="chat-avatar">JD</div>
+                                <div class="chat-header-info">
+                                    <div class="chat-header-name">John's Hardware</div>
+                                    <div class="chat-header-status">online</div>
+                                </div>
+                            </div>
+                            <div class="chat-body">
+                                <div class="chat-bubble chat-in">
+                                    Hi, I need 15 boxes of 60x60 ceramic grey tiles and 8 boxes of 30x60 white wall tiles. Deliver to Industrial Area, Plot 47.
+                                    <div class="chat-time">10:23 AM</div>
+                                </div>
+                                <div class="chat-bubble chat-out">
+                                    Hi John! Order received. Checking stock now...
+                                    <div class="chat-time">10:24 AM ✓✓</div>
+                                </div>
+                                <div class="chat-bubble chat-out">
+                                    ✅ Both items in stock.<br>
+                                    📄 Quote #Q-2043 attached.<br>
+                                    Total: <strong>KES 34,500</strong>
+                                    <div class="chat-time">10:26 AM ✓✓</div>
+                                </div>
+                                <div class="chat-typing">
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                    <div class="typing-dot"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="floating-card floating-card-1">
+                    <div class="floating-icon" style="background: rgba(37,211,102,0.2);">📱</div>
+                    <div class="floating-title">Order Received</div>
+                    <div class="floating-desc">Auto-reply sent</div>
+                </div>
+                <div class="floating-card floating-card-2">
+                    <div class="floating-icon" style="background: rgba(0,212,255,0.2);">📄</div>
+                    <div class="floating-title">Quote #2043</div>
+                    <div class="floating-desc">PDF generated</div>
+                </div>
+                <div class="floating-card floating-card-3">
+                    <div class="floating-icon" style="background: rgba(102,126,234,0.2);">💰</div>
+                    <div class="floating-title">KES 34,500</div>
+                    <div class="floating-desc">Payment matched</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trust">
+        <div class="container">
+            <div class="trust-inner">
+                <div class="trust-item">
+                    <div class="trust-icon">📱</div>
+                    <div class="trust-text">
+                        <strong>Works on Any Phone</strong>
+                        No app install for customers
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">💰</div>
+                    <div class="trust-text">
+                        <strong>M-Pesa Integrated</strong>
+                        Auto-match payments to orders
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">⚡</div>
+                    <div class="trust-text">
+                        <strong>5-Minute Setup</strong>
+                        Start taking orders today
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">📶</div>
+                    <div class="trust-text">
+                        <strong>Works Offline</strong>
+                        Syncs when connection returns
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="showcase">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">🏗️ Real Businesses</div>
+                <h2 class="section-title">Built for the Hardware Supply Chain</h2>
+                <p class="section-desc">From warehouse to delivery — every step of your distribution workflow, digitized.</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="showcase-item">
+                    <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8eac5?w=600&q=80" alt="Tile Warehouse Storage" loading="lazy">
+                    <div class="showcase-overlay">
+                        <div>
+                            <div class="showcase-label">Warehouse Management</div>
+                            <div class="showcase-sublabel">Stock levels, pick lists, batch tracking</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showcase-item">
+                    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&q=80" alt="Building Materials Delivery" loading="lazy">
+                    <div class="showcase-overlay">
+                        <div>
+                            <div class="showcase-label">Delivery Tracking</div>
+                            <div class="showcase-sublabel">GPS routes, proof of delivery, photos</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="showcase-item">
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&q=80" alt="Hardware Store Counter" loading="lazy">
+                    <div class="showcase-overlay">
+                        <div>
+                            <div class="showcase-label">Order Desk</div>
+                            <div class="showcase-sublabel">WhatsApp orders turned into invoices</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem" id="problem">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">⚠️ The Daily Chaos</div>
+                <h2 class="section-title">Your Orders Are Scattered.<br>Your Money Is Leaking.</h2>
+                <p class="section-desc">Every hardware distributor in Nairobi, Mombasa, and Kisumu faces the same daily struggle.</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📱</div>
+                    <h3>Orders Buried in WhatsApp</h3>
+                    <p>Customer sends "Send me 20 boxes of 60x60 grey tiles" in a group chat. Three hours later, nobody knows who said what.</p>
+                    <div class="problem-stat">23% of orders get lost</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💰</div>
+                    <h3>Wrong Prices, Wrong Customers</h3>
+                    <p>Junior staff quotes retail price to a wholesale customer. Or applies last month's price. Margin disappears.</p>
+                    <div class="problem-stat">KES 50K+ lost monthly</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📋</div>
+                    <h3>Manual Invoices Take Hours</h3>
+                    <p>Excel templates, copy-paste, manual calculations, print, scan, WhatsApp back. One invoice takes 45 minutes.</p>
+                    <div class="problem-stat">4 hours/day wasted</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🚚</div>
+                    <h3>No Delivery Tracking</h3>
+                    <p>Driver leaves at 9am. Customer calls at 2pm asking "Where is my order?" Nobody knows. Phone rings all day.</p>
+                    <div class="problem-stat">15 calls/day per order</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">💸</div>
+                    <h3>Payment Follow-Up Nightmare</h3>
+                    <p>Invoices sent on Monday. Payments trickle in Friday. You spend Saturday reconciling M-Pesa messages.</p>
+                    <div class="problem-stat">3 days to reconcile</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">📊</div>
+                    <h3>No Stock Visibility</h3>
+                    <p>You sold 50 boxes you don't have. Now you have an angry contractor on site waiting. Backorder? What backorder?</p>
+                    <div class="problem-stat">12% stock discrepancies</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">✨ The Fix</div>
+                <h2 class="section-title">One System. Every Order.<br>From WhatsApp to Delivery.</h2>
+                <p class="section-desc">Desk Yetu is not an ERP. It is your order desk — the layer between your customer and your warehouse that finally makes sense.</p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon icon-green">💬</div>
+                    <h3>WhatsApp Order Inbox</h3>
+                    <p>All customer messages land in one dashboard. AI reads the message, suggests products, and creates a draft order. Your staff just confirms.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon icon-blue">📋</div>
+                    <h3>Auto Quotes & Invoices</h3>
+                    <p>One tap generates a professional PDF quote with your logo, correct prices, VAT, and delivery fee. Sent via WhatsApp instantly.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon icon-purple">💰</div>
+                    <h3>M-Pesa Payment Matching</h3>
+                    <p>Customer pays via M-Pesa. The system auto-matches the payment to the order. No more Saturday reconciliations.</p>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon icon-orange">🚚</div>
+                    <h3>Delivery Tracking</h3>
+                    <p>Assign drivers, optimize routes, and send "Out for delivery" updates to customers. Collect proof of delivery with a photo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">🔄 The Flow</div>
+                <h2 class="section-title">How Desk Yetu Works</h2>
+                <p class="section-desc">From the customer's first WhatsApp to the completed delivery — every step is tracked.</p>
+            </div>
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-connector"></div>
+                    <h4>Customer Messages</h4>
+                    <p>"Hi, I need 20 boxes of 60x60 tiles delivered to Kitengela"</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-connector"></div>
+                    <h4>System Reads & Drafts</h4>
+                    <p>AI extracts products, quantities, and delivery address. Creates draft order.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-connector"></div>
+                    <h4>Staff Confirms</h4>
+                    <p>Your order desk reviews, applies correct price list, and sends quote.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-connector"></div>
+                    <h4>Customer Approves</h4>
+                    <p>"Sawa, send it." Quote converts to confirmed order automatically.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">5</div>
+                    <h4>Payment & Delivery</h4>
+                    <p>M-Pesa payment matched. Driver dispatched. Proof collected. Done.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="whatsapp-demo">
+        <div class="container">
+            <div class="whatsapp-content">
+                <div class="whatsapp-text">
+                    <h2>Your Customers Never Leave <span class="gradient-text">WhatsApp</span></h2>
+                    <p>They don't need to download an app. They don't need to learn software. They message you like they always have. Desk Yetu handles the rest.</p>
+                    <ul class="whatsapp-features">
+                        <li>
+                            <div class="feature-check">✓</div>
+                            <span>Auto-reply: "Order received. Checking stock now."</span>
+                        </li>
+                        <li>
+                            <div class="feature-check">✓</div>
+                            <span>PDF quotes sent directly in chat</span>
+                        </li>
+                        <li>
+                            <div class="feature-check">✓</div>
+                            <span>M-Pesa payment requests with one tap</span>
+                        </li>
+                        <li>
+                            <div class="feature-check">✓</div>
+                            <span>Delivery updates: "Your order is 15 mins away"</span>
+                        </li>
+                        <li>
+                            <div class="feature-check">✓</div>
+                            <span>Backorder alerts: "Item back in stock Thursday"</span>
+                        </li>
+                        <li>
+                            <div class="feature-check">✓</div>
+                            <span>Payment reminders: "Invoice #204 due tomorrow"</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="phone-showcase">
+                    <div class="phone-3d-large">
+                        <div class="phone-frame">
+                            <div class="phone-notch"></div>
+                            <div class="phone-screen">
+                                <div class="chat-header">
+                                    <div class="chat-avatar">JD</div>
+                                    <div class="chat-header-info">
+                                        <div class="chat-header-name">John's Hardware</div>
+                                        <div class="chat-header-status">typing...</div>
+                                    </div>
+                                </div>
+                                <div class="chat-body">
+                                    <div class="chat-bubble chat-in">
+                                        Hi, I need 15 boxes of 60x60 ceramic grey tiles and 8 boxes of 30x60 white wall tiles. Deliver to Industrial Area, Plot 47.
+                                        <div class="chat-time">10:23 AM</div>
+                                    </div>
+                                    <div class="chat-bubble chat-out">
+                                        Hi John! Order received. Checking stock now...
+                                        <div class="chat-time">10:24 AM ✓✓</div>
+                                    </div>
+                                    <div class="chat-bubble chat-out">
+                                        ✅ Both items in stock.<br>
+                                        📄 Quote #Q-2043 attached.<br>
+                                        Total: <strong>KES 34,500</strong> (incl. VAT + delivery)
+                                        <div class="chat-time">10:26 AM ✓✓</div>
+                                    </div>
+                                    <div class="chat-bubble chat-in">
+                                        Sawa, send it. Paying now.
+                                        <div class="chat-time">10:30 AM</div>
+                                    </div>
+                                    <div class="chat-bubble chat-out">
+                                        ✅ Payment confirmed: KES 34,500<br>
+                                        🚚 Driver Mike assigned. ETA: 2:00 PM<br>
+                                        Tracking: bit.ly/ord-2043
+                                        <div class="chat-time">10:35 AM ✓✓</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ROI CALCULATOR SECTION -->
+    <section class="roi-section" id="roi">
+        <div class="container">
+            <div class="roi-container">
+                <div class="roi-text">
+                    <h2>Calculate Your <span class="gradient-text">Savings</span></h2>
+                    <p>See exactly how much time and money Desk Yetu saves your business every month. Built for Kenyan distributors, priced in KES.</p>
+                    <ul class="roi-benefits">
+                        <li><span>⏱️</span> Save 2+ hours per day on order processing</li>
+                        <li><span>💰</span> Stop losing KES 50,000+ monthly on pricing errors</li>
+                        <li><span>📱</span> Reduce customer follow-up calls by 80%</li>
+                        <li><span>📊</span> Get real-time stock visibility across all branches</li>
+                        <li><span>🚚</span> Track every delivery with GPS and photo proof</li>
+                    </ul>
+                </div>
+                <div class="roi-calculator">
+                    <h3>💡 Your Monthly Savings</h3>
+                    <div class="roi-input-group">
+                        <label>Orders per day</label>
+                        <input type="number" class="roi-input" id="ordersPerDay" value="20" min="1" onchange="calculateROI()">
+                    </div>
+                    <div class="roi-input-group">
+                        <label>Average order value (KES)</label>
+                        <input type="number" class="roi-input" id="avgOrderValue" value="25000" min="1000" onchange="calculateROI()">
+                    </div>
+                    <div class="roi-input-group">
+                        <label>Staff hourly rate (KES)</label>
+                        <input type="number" class="roi-input" id="hourlyRate" value="200" min="50" onchange="calculateROI()">
+                    </div>
+                    <div class="roi-result">
+                        <div class="roi-result-label">Estimated Monthly Savings</div>
+                        <div class="roi-result-value" id="roiValue">KES 156,000</div>
+                        <div class="roi-result-sublabel">From time saved + fewer errors + faster payments</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- INTEGRATIONS SECTION -->
+    <section class="integrations" id="integrations">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">🔗 Connected</div>
+                <h2 class="section-title">Works With Your Existing Tools</h2>
+                <p class="section-desc">No need to replace everything. Desk Yetu connects to the services you already use.</p>
+            </div>
+            <div class="integrations-grid">
+                <div class="integration-card">
+                    <div class="integration-icon">💬</div>
+                    <h4>WhatsApp Business</h4>
+                    <p>Native integration</p>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-icon">📱</div>
+                    <h4>M-Pesa</h4>
+                    <p>STK push & auto-match</p>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-icon">📊</div>
+                    <h4>Google Sheets</h4>
+                    <p>Export reports</p>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-icon">📧</div>
+                    <h4>Email</h4>
+                    <p>Quote delivery</p>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-icon">🗺️</div>
+                    <h4>Google Maps</h4>
+                    <p>Route optimization</p>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-icon">📈</div>
+                    <h4>Analytics</h4>
+                    <p>Custom dashboards</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURE COMPARISON -->
+    <section class="comparison" id="comparison">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">⚖️ Compare</div>
+                <h2 class="section-title">Desk Yetu vs. The Old Way</h2>
+                <p class="section-desc">See why hardware distributors across Kenya are switching from spreadsheets and chaos to Desk Yetu.</p>
+            </div>
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Old Way (Excel/WhatsApp)</th>
+                            <th>Desk Yetu</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="feature-category">
+                            <td colspan="3">Order Management</td>
+                        </tr>
+                        <tr>
+                            <td>Order capture</td>
+                            <td>Manual copy-paste from WhatsApp</td>
+                            <td class="check-yes">Auto-extract from messages</td>
+                        </tr>
+                        <tr>
+                            <td>Product lookup</td>
+                            <td>Scroll through Excel sheets</td>
+                            <td class="check-yes">AI suggests products</td>
+                        </tr>
+                        <tr>
+                            <td>Price accuracy</td>
+                            <td>Manual entry, frequent errors</td>
+                            <td class="check-yes">Auto-apply correct price list</td>
+                        </tr>
+                        <tr class="feature-category">
+                            <td colspan="3">Invoicing & Payments</td>
+                        </tr>
+                        <tr>
+                            <td>Quote generation</td>
+                            <td>45 minutes per quote</td>
+                            <td class="check-yes">1 tap, 10 seconds</td>
+                        </tr>
+                        <tr>
+                            <td>M-Pesa matching</td>
+                            <td>Saturday reconciliation</td>
+                            <td class="check-yes">Auto-match in real-time</td>
+                        </tr>
+                        <tr>
+                            <td>Payment reminders</td>
+                            <td>Manual follow-up calls</td>
+                            <td class="check-yes">Automated WhatsApp reminders</td>
+                        </tr>
+                        <tr class="feature-category">
+                            <td colspan="3">Delivery & Operations</td>
+                        </tr>
+                        <tr>
+                            <td>Driver assignment</td>
+                            <td>Phone calls, paper notes</td>
+                            <td class="check-yes">Digital dispatch with GPS</td>
+                        </tr>
+                        <tr>
+                            <td>Proof of delivery</td>
+                            <td>Paper signatures (often lost)</td>
+                            <td class="check-yes">Photo + digital signature</td>
+                        </tr>
+                        <tr>
+                            <td>Stock visibility</td>
+                            <td>End-of-day Excel update</td>
+                            <td class="check-yes">Real-time across all branches</td>
+                        </tr>
+                        <tr class="feature-category">
+                            <td colspan="3">Business Intelligence</td>
+                        </tr>
+                        <tr>
+                            <td>Sales reports</td>
+                            <td>Manual aggregation weekly</td>
+                            <td class="check-yes">Live dashboard, any timeframe</td>
+                        </tr>
+                        <tr>
+                            <td>Customer insights</td>
+                            <td>Memory and guesswork</td>
+                            <td class="check-yes">Purchase history & trends</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">💳 Simple Pricing</div>
+                <h2 class="section-title">Pricing for Kenyan Businesses</h2>
+                <p class="section-desc">No hidden fees. No enterprise contracts. Pay monthly, cancel anytime. All prices in KES.</p>
+            </div>
+            <div class="pricing-toggle">
+                <button class="pricing-toggle-btn active" onclick="togglePricing('monthly')">Monthly</button>
+                <button class="pricing-toggle-btn" onclick="togglePricing('yearly')">Yearly <span style="color: var(--primary);">(Save 20%)</span></button>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>Starter</h3>
+                    <p class="pricing-desc">For small distributors just getting organized</p>
+                    <div class="pricing-amount" data-monthly="4500" data-yearly="3600">KES 4,500<span>/month</span></div>
+                    <div class="pricing-save">Save KES 10,800/year</div>
+                    <ul>
+                        <li>1 WhatsApp Business number</li>
+                        <li>Up to 200 orders/month</li>
+                        <li>Customer directory (500 customers)</li>
+                        <li>Basic product catalog (200 products)</li>
+                        <li>1 price list</li>
+                        <li>PDF quotes & invoices</li>
+                        <li>M-Pesa payment tracking (manual)</li>
+                        <li>Basic order status tracking</li>
+                        <li>1 staff user</li>
+                        <li>Email support (24h response)</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta pricing-cta-secondary">Get Started</a>
+                </div>
+                <div class="pricing-card popular">
+                    <div class="popular-badge">Most Popular</div>
+                    <h3>Growth</h3>
+                    <p class="pricing-desc">For established distributors ready to scale</p>
+                    <div class="pricing-amount" data-monthly="9500" data-yearly="7600">KES 9,500<span>/month</span></div>
+                    <div class="pricing-save">Save KES 22,800/year</div>
+                    <ul>
+                        <li>2 WhatsApp Business numbers</li>
+                        <li>Unlimited orders</li>
+                        <li>Unlimited customers & products</li>
+                        <li>Multiple price lists & customer tiers</li>
+                        <li>M-Pesa STK push + auto-matching</li>
+                        <li>Delivery tracking + proof of delivery</li>
+                        <li>Backorder management</li>
+                        <li>Automated payment reminders</li>
+                        <li>Basic analytics dashboard</li>
+                        <li>5 staff users</li>
+                        <li>Priority WhatsApp support (4h)</li>
+                        <li>Monthly business review call</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta pricing-cta-primary">Start Free 14-Day Trial</a>
+                </div>
+                <div class="pricing-card">
+                    <h3>Pro</h3>
+                    <p class="pricing-desc">For multi-branch distributors with complex needs</p>
+                    <div class="pricing-amount" data-monthly="18000" data-yearly="14400">KES 18,000<span>/month</span></div>
+                    <div class="pricing-save">Save KES 43,200/year</div>
+                    <ul>
+                        <li>Unlimited WhatsApp numbers</li>
+                        <li>Unlimited everything</li>
+                        <li>Multi-branch support</li>
+                        <li>Advanced analytics & custom reports</li>
+                        <li>Sales rep commission tracking</li>
+                        <li>API access for custom integrations</li>
+                        <li>Dedicated account manager</li>
+                        <li>Unlimited staff users</li>
+                        <li>On-site onboarding (Nairobi)</li>
+                        <li>Quarterly business review</li>
+                        <li>2h SLA response time</li>
+                    </ul>
+                    <a href="#cta" class="pricing-cta pricing-cta-secondary">Contact Sales</a>
+                </div>
+            </div>
+            <p style="text-align:center; margin-top:48px; color:rgba(255,255,255,0.4); font-size:14px;">
+                💡 All plans include: Free setup · No credit card for trial · Cancel anytime · KES pricing, no forex risk
+            </p>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">💬 Real Stories</div>
+                <h2 class="section-title">Trusted by Distributors<br>Across Kenya</h2>
+                <p class="section-desc">From Industrial Area to Mombasa Road, hardware businesses are getting their orders under control.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">Before Desk Yetu, my order desk girl spent 4 hours every morning just sorting through WhatsApp messages from the night before. Now she has a clean inbox and draft orders waiting. We process 40% more orders with the same staff.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">PK</div>
+                        <div>
+                            <div class="testimonial-name">Peter Kimani</div>
+                            <div class="testimonial-role">Owner, Kimani Tiles & Sanitaryware, Nairobi</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">I used to send wrong prices to customers because my junior staff didn't know who gets wholesale rates. Now the system applies the correct price list automatically. I stopped losing margin on every third order.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">SO</div>
+                        <div>
+                            <div class="testimonial-name">Sarah Ochieng</div>
+                            <div class="testimonial-role">Managing Director, Mombasa Building Supplies</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <p class="testimonial-text">My driver used to get lost, deliver to the wrong site, or forget to collect signatures. Now I see exactly where he is, what he delivered, and I have a photo of the signed delivery note before he leaves the gate.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">JM</div>
+                        <div>
+                            <div class="testimonial-name">James Mwangi</div>
+                            <div class="testimonial-role">Operations Manager, Thika Hardware Distributors</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-label">❓ Questions</div>
+                <h2 class="section-title">Frequently Asked Questions</h2>
+                <p class="section-desc">Everything you need to know about getting started with Desk Yetu.</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How long does setup take?</span>
+                        <div class="faq-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Most businesses are up and running within 30 minutes. We connect to your existing WhatsApp Business number, import your product catalog (from Excel or Google Sheets), and configure your price lists. Our team walks you through it via WhatsApp call — no tech expertise needed.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do my customers need to install anything?</span>
+                        <div class="faq-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely not. Your customers continue messaging you on WhatsApp exactly as they do now. Desk Yetu works behind the scenes — reading messages, generating quotes, and sending updates — all through the same WhatsApp chat they already use.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How does M-Pesa integration work?</span>
+                        <div class="faq-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We integrate with Safaricom's M-Pesa API. When a customer pays, the payment is automatically matched to their order using the M-Pesa confirmation code. On the Growth and Pro plans, you can also send STK push requests directly from the system — the customer gets a payment prompt on their phone instantly.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I use this for multiple branches?</span>
+                        <div class="faq-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes — the Pro plan supports unlimited branches with centralized inventory management. Each branch can have its own stock levels, drivers, and staff, while head office sees consolidated reports. Perfect for distributors with warehouses in Nairobi, Mombasa, and Kisumu.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What happens after the 14-day trial?</span>
+                        <div class="faq-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>After your free pilot, you choose a plan that fits your business. There's no automatic billing — we ask first. Your data stays intact, and you can export everything if you decide not to continue. Most businesses see ROI within the first week of the trial.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is my data secure?</span>
+                        <div class="faq-icon">▼</div>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Your data is stored on secure servers with bank-level encryption. We never share customer information with third parties. All M-Pesa transactions are processed through Safaricom's secure API. We also offer data backup and export features so you always have control.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Stop Losing Orders.<br>Start Closing Sales.</h2>
+                <p>Join 50+ hardware distributors in Kenya who have replaced chaos with clarity. Start your free 14-day pilot today — no credit card required.</p>
+                <div class="cta-buttons">
+                    <a href="#" class="btn-primary btn-float">Start Free 14-Day Pilot →</a>
+                    <a href="tel:+254712345678" class="btn-secondary">📞 Call Us: 0712 345 678</a>
+                </div>
+                <p class="cta-note">
+                    Free onboarding session · Works with your existing WhatsApp · M-Pesa ready · Cancel anytime
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <div class="logo-icon">📦</div>
+                Desk Yetu
+            </div>
+            <p class="footer-tagline">WhatsApp Order Management for Hardware Distributors · Nairobi, Kenya</p>
+            <div class="footer-links">
+                <a href="#problem">The Problem</a>
+                <a href="#solution">Solution</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#testimonials">Stories</a>
+                <a href="#faq">FAQ</a>
+                <a href="#cta">Get Started</a>
+            </div>
+            <p class="footer-copy">Built for the Kenyan market. Priced in KES. Supported by people who understand your business. 🇰🇪</p>
+        </div>
+    </footer>
+
+    <script>
+        // Particle System
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 30;
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            particle.style.animationDelay = Math.random() * 10 + 's';
+            particle.style.width = (Math.random() * 3 + 1) + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.opacity = Math.random() * 0.5 + 0.2;
+            particlesContainer.appendChild(particle);
+        }
+
+        // Navbar scroll effect
+        const nav = document.getElementById('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll reveal animation
+        const revealElements = document.querySelectorAll('.problem-card, .solution-card, .step, .pricing-card, .testimonial-card, .showcase-item, .integration-card, .faq-item');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+        revealElements.forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.6s ease';
+            revealObserver.observe(el);
+        });
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Parallax effect for hero orbs
+        window.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.hero-orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 20;
+                const xOffset = (x - 0.5) * speed;
+                const yOffset = (y - 0.5) * speed;
+                orb.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+
+        // 3D tilt effect for phone mockups
+        const phone3dElements = document.querySelectorAll('.phone-3d, .phone-3d-large');
+        phone3dElements.forEach(phone => {
+            phone.addEventListener('mousemove', (e) => {
+                const rect = phone.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                phone.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+            phone.addEventListener('mouseleave', () => {
+                phone.style.transform = '';
+            });
+        });
+
+        // Animated counter for hero stats
+        const animateCounter = (element, target, suffix = '') => {
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                if (target >= 1000) {
+                    element.textContent = Math.floor(current).toLocaleString() + suffix;
+                } else {
+                    element.textContent = Math.floor(current) + suffix;
+                }
+            }, 30);
+        };
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.hero-stat-number');
+                    statNumbers.forEach(stat => {
+                        const target = parseInt(stat.getAttribute('data-target'));
+                        const text = stat.textContent;
+                        if (target >= 1000) {
+                            animateCounter(stat, target, '+');
+                        } else if (text.includes('hrs') || text.includes('Hours')) {
+                            stat.textContent = target + 'hrs';
+                        } else {
+                            animateCounter(stat, target, '+');
+                        }
+                    });
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const heroStats = document.querySelector('.hero-stats');
+        if (heroStats) statsObserver.observe(heroStats);
+
+        // ROI Calculator
+        function calculateROI() {
+            const ordersPerDay = parseInt(document.getElementById('ordersPerDay').value) || 20;
+            const avgOrderValue = parseInt(document.getElementById('avgOrderValue').value) || 25000;
+            const hourlyRate = parseInt(document.getElementById('hourlyRate').value) || 200;
+
+            // Time saved: 2 hours per day * 22 working days * hourly rate
+            const timeSaved = 2 * 22 * hourlyRate;
+
+            // Error reduction: 5% of monthly revenue (industry average for pricing errors)
+            const monthlyRevenue = ordersPerDay * avgOrderValue * 22;
+            const errorSavings = monthlyRevenue * 0.05;
+
+            // Faster payment collection: 3 days faster = improved cash flow value
+            const cashFlowValue = monthlyRevenue * 0.02;
+
+            const totalSavings = timeSaved + errorSavings + cashFlowValue;
+
+            document.getElementById('roiValue').textContent = 'KES ' + Math.floor(totalSavings).toLocaleString();
+        }
+
+        // Pricing Toggle
+        function togglePricing(period) {
+            const buttons = document.querySelectorAll('.pricing-toggle-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const amounts = document.querySelectorAll('.pricing-amount');
+            const saves = document.querySelectorAll('.pricing-save');
+
+            amounts.forEach((amount, index) => {
+                const monthly = amount.getAttribute('data-monthly');
+                const yearly = amount.getAttribute('data-yearly');
+                const value = period === 'yearly' ? yearly : monthly;
+                const suffix = period === 'yearly' ? '/month <span style="font-size:14px;color:rgba(255,255,255,0.5)">(billed annually)</span>' : '/month';
+                amount.innerHTML = 'KES ' + parseInt(value).toLocaleString() + '<span>' + suffix + '</span>';
+            });
+
+            saves.forEach(save => {
+                if (period === 'yearly') {
+                    save.classList.add('visible');
+                } else {
+                    save.classList.remove('visible');
+                }
+            });
+        }
+
+        // FAQ Accordion
+        function toggleFAQ(element) {
+            const item = element.parentElement;
+            const isActive = item.classList.contains('active');
+
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(faq => {
+                faq.classList.remove('active');
+            });
+
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // Initialize ROI calculator
+        calculateROI();
+    </script>
+</body>
+</html>
